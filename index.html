@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprys Family Tree</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Sprys Family Tree</h1>
+        <nav>
+            <button id="nav-tree" class="nav-btn active">Tree View</button>
+            <button id="nav-list" class="nav-btn">All People</button>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search names...">
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Tree View -->
+        <section id="tree-view" class="view active">
+            <div class="tree-controls">
+                <button id="zoom-in" title="Zoom In">+</button>
+                <button id="zoom-out" title="Zoom Out">-</button>
+                <button id="zoom-reset" title="Reset View">Reset</button>
+                <span id="current-root"></span>
+            </div>
+            <div id="tree-container">
+                <div id="tree" class="tree"></div>
+            </div>
+        </section>
+
+        <!-- List View -->
+        <section id="list-view" class="view">
+            <div class="list-controls">
+                <label>Sort by:
+                    <select id="sort-select">
+                        <option value="lastName">Last Name</option>
+                        <option value="firstName">First Name</option>
+                        <option value="birthDate">Birth Date</option>
+                    </select>
+                </label>
+            </div>
+            <div id="people-list" class="people-list"></div>
+        </section>
+
+        <!-- Person Profile Panel (slides in) -->
+        <aside id="profile-panel" class="profile-panel">
+            <button id="close-profile" class="close-btn">&times;</button>
+            <div id="profile-content"></div>
+        </aside>
+    </main>
+
+    <!-- Lightbox for images -->
+    <div id="lightbox" class="lightbox">
+        <button id="close-lightbox" class="close-btn">&times;</button>
+        <img id="lightbox-img" src="" alt="">
+        <div id="lightbox-caption"></div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

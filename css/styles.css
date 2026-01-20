@@ -1,0 +1,837 @@
+/* === Variables === */
+:root {
+    --primary-blue: #5b7bb4;
+    --primary-purple: #8b7bb4;
+    --light-blue: #e8f0f8;
+    --light-purple: #f0e8f8;
+    --accent-blue: #4a6fa5;
+    --accent-purple: #7a6ba5;
+    --bg-color: #fafbfd;
+    --card-bg: #ffffff;
+    --text-color: #2c3e50;
+    --text-muted: #6c7a89;
+    --border-color: #d4dde8;
+    --shadow: 0 2px 8px rgba(91, 123, 180, 0.15);
+    --shadow-hover: 0 4px 16px rgba(91, 123, 180, 0.25);
+    --male-color: #5b7bb4;
+    --female-color: #8b7bb4;
+    --transition: 0.2s ease;
+}
+
+/* === Reset & Base === */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* === Header === */
+header {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+nav {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.nav-btn.active {
+    background: white;
+    color: var(--primary-blue);
+}
+
+.search-container {
+    position: relative;
+    margin-left: auto;
+}
+
+#search-input {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    width: 250px;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+#search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 6px;
+    box-shadow: var(--shadow-hover);
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    z-index: 200;
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background: var(--light-blue);
+}
+
+.search-result-item .name {
+    font-weight: 500;
+}
+
+.search-result-item .dates {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* === Main Content === */
+main {
+    position: relative;
+    min-height: calc(100vh - 120px);
+}
+
+.view {
+    display: none;
+    padding: 1rem;
+}
+
+.view.active {
+    display: block;
+}
+
+/* === Tree View === */
+.tree-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.tree-controls button {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.tree-controls button:hover {
+    background: var(--light-blue);
+    border-color: var(--primary-blue);
+}
+
+#current-root {
+    margin-left: 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+#tree-container {
+    overflow: auto;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    min-height: 500px;
+    padding: 2rem;
+}
+
+.tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: center top;
+    transition: transform 0.3s ease;
+}
+
+/* Tree structure */
+.generation {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.family-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.couple {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    position: relative;
+}
+
+.couple::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--border-color);
+    z-index: -1;
+}
+
+.children-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    position: relative;
+}
+
+.children-container::before {
+    content: '';
+    position: absolute;
+    top: -1.5rem;
+    left: 50%;
+    width: 2px;
+    height: 1.5rem;
+    background: var(--border-color);
+}
+
+.child-branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.child-branch::before {
+    content: '';
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    width: 2px;
+    height: 0.75rem;
+    background: var(--border-color);
+}
+
+/* Horizontal line connecting siblings */
+.children-container.multiple::after {
+    content: '';
+    position: absolute;
+    top: -0.75rem;
+    left: calc(50% - 50%);
+    right: calc(50% - 50%);
+    height: 2px;
+    background: var(--border-color);
+}
+
+/* Person card */
+.person-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.75rem;
+    min-width: 140px;
+    max-width: 180px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+.person-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.person-card.male {
+    border-color: var(--male-color);
+    background: linear-gradient(to bottom, var(--light-blue), var(--card-bg));
+}
+
+.person-card.female {
+    border-color: var(--female-color);
+    background: linear-gradient(to bottom, var(--light-purple), var(--card-bg));
+}
+
+.person-card.selected {
+    box-shadow: 0 0 0 3px var(--accent-blue);
+}
+
+.person-card .photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 0.5rem;
+    background: var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    overflow: hidden;
+}
+
+.person-card .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.person-card .name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    word-wrap: break-word;
+}
+
+.person-card .dates {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.person-card .expand-btn {
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.person-card .expand-btn:hover {
+    background: var(--light-blue);
+}
+
+/* Ancestors section */
+.ancestors {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.ancestor-generation {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+/* === List View === */
+.list-controls {
+    margin-bottom: 1rem;
+}
+
+.list-controls select {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.people-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.person-list-item {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.person-list-item:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.person-list-item .photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--border-color);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.person-list-item.male .photo {
+    background: var(--light-blue);
+    color: var(--male-color);
+}
+
+.person-list-item.female .photo {
+    background: var(--light-purple);
+    color: var(--female-color);
+}
+
+.person-list-item .info .name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.person-list-item .info .dates {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.person-list-item .info .location {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* === Profile Panel === */
+.profile-panel {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 450px;
+    max-width: 100vw;
+    height: 100vh;
+    background: var(--card-bg);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 150;
+    overflow-y: auto;
+    transition: right 0.3s ease;
+}
+
+.profile-panel.open {
+    right: 0;
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    line-height: 1;
+    z-index: 10;
+}
+
+.close-btn:hover {
+    color: var(--text-color);
+}
+
+#profile-content {
+    padding: 2rem;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-top: 1rem;
+}
+
+.profile-header .photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    background: var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--text-muted);
+    overflow: hidden;
+}
+
+.profile-header .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-header.male .photo {
+    background: var(--light-blue);
+    border: 3px solid var(--male-color);
+}
+
+.profile-header.female .photo {
+    background: var(--light-purple);
+    border: 3px solid var(--female-color);
+}
+
+.profile-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-header .life-dates {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.profile-section {
+    margin-bottom: 1.5rem;
+}
+
+.profile-section h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.profile-section .detail {
+    margin-bottom: 0.5rem;
+}
+
+.profile-section .detail .label {
+    font-weight: 500;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.profile-section .detail .value {
+    margin-top: 0.125rem;
+}
+
+/* Relationship links in profile */
+.relation-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--light-blue);
+    border-radius: 6px;
+    margin: 0.25rem 0.25rem 0.25rem 0;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.relation-link:hover {
+    background: var(--primary-blue);
+    color: white;
+}
+
+.relation-link.female {
+    background: var(--light-purple);
+}
+
+.relation-link.female:hover {
+    background: var(--primary-purple);
+    color: white;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.profile-actions button {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.profile-actions .primary-btn {
+    background: var(--primary-blue);
+    color: white;
+}
+
+.profile-actions .primary-btn:hover {
+    background: var(--accent-blue);
+}
+
+.profile-actions .secondary-btn {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+.profile-actions .secondary-btn:hover {
+    background: var(--border-color);
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.timeline-item:last-child {
+    border-bottom: none;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 0.5rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    border: 2px solid var(--card-bg);
+}
+
+.timeline-item .date {
+    font-weight: 500;
+    color: var(--primary-blue);
+    font-size: 0.85rem;
+}
+
+.timeline-item .event {
+    margin-top: 0.25rem;
+}
+
+/* Documents gallery */
+.documents-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.75rem;
+}
+
+.document-thumb {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.document-thumb:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow);
+}
+
+.document-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.document-thumb .placeholder {
+    font-size: 2rem;
+    color: var(--text-muted);
+}
+
+/* === Lightbox === */
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.lightbox.active {
+    display: flex;
+}
+
+.lightbox .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: white;
+}
+
+#lightbox-img {
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+#lightbox-caption {
+    color: white;
+    margin-top: 1rem;
+    text-align: center;
+    max-width: 600px;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem;
+    }
+
+    header h1 {
+        font-size: 1.25rem;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container {
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+
+    #search-input {
+        width: 100%;
+    }
+
+    .profile-panel {
+        width: 100vw;
+        right: -100vw;
+    }
+
+    .person-card {
+        min-width: 100px;
+        max-width: 120px;
+        padding: 0.5rem;
+    }
+
+    .person-card .photo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .person-card .name {
+        font-size: 0.75rem;
+    }
+
+    .ancestor-generation {
+        gap: 1rem;
+    }
+
+    .children-container {
+        gap: 0.5rem;
+    }
+}
+
+/* === Loading state === */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: var(--text-muted);
+}
+
+.loading::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* === Empty states === */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+}
+
+.empty-state h3 {
+    margin-bottom: 0.5rem;
+}
